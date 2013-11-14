@@ -15,15 +15,19 @@
 	$filename = 'data';
 	switch ($method){
 		case 'send':
-			require_once 'Zend/Loader/Autoloader.php';
-			$loader = Zend_Loader_Autoloader::getInstance();
-			$loader->registerNamespace('Rpc');
-			$xmlString = $_POST['xmlString'];
-			$callMethod = $_POST['callMethod'];
-			$server = $_POST['server'];
-			
-			$xmlRpc_Client = new Rpc_Client($server);
-			$response = $xmlRpc_Client->go($xmlString);
+			try{
+				require_once 'Zend/Loader/Autoloader.php';
+				$loader = Zend_Loader_Autoloader::getInstance();
+				$loader->registerNamespace('Rpc');
+				$xmlString = $_POST['xmlString'];
+				$callMethod = $_POST['callMethod'];
+				$server = $_POST['server'];
+				
+				$xmlRpc_Client = new Rpc_Client($server);
+				$response = $xmlRpc_Client->go($xmlString);
+			}catch (Exception $e){
+				$response = $e->getMessage();
+			}
 			die($response);
 			break;
 		case 'remove':
